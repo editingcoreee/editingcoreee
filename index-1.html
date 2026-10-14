@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}</style>
+<title>Editing.Coreeé Production</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cinema-first. The hero is a 2.39:1 letterboxed frame with REC timecode and corner marks; sections below are quiet hairline-ruled rows. Boldness lives in the hero; gold is used only for accents. */
+:root {
+  --bg: #0b0c0e;
+  --panel: #121417;
+  --fg: #ebe8e1;
+  --muted: #8e8b84;
+  --line: #25282d;
+  --accent: #c9a96a;
+  --accent-ink: #0b0c0e;
+  --leak-a: rgba(201, 169, 106, 0.28);
+  --leak-b: rgba(90, 110, 160, 0.22);
+  --display: "Syne", "Arial Black", Arial, sans-serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eceeef; --panel: #f7f8f8; --fg: #14171a; --muted: #5d6368; --line: #cdd2d6;
+    --accent: #8a6a2c; --accent-ink: #ffffff; --leak-a: rgba(201,169,106,0.35); --leak-b: rgba(90,110,160,0.18);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eceeef; --panel: #f7f8f8; --fg: #14171a; --muted: #5d6368; --line: #cdd2d6;
+  --accent: #8a6a2c; --accent-ink: #ffffff; --leak-a: rgba(201,169,106,0.35); --leak-b: rgba(90,110,160,0.18);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--body); font-size: 16px; line-height: 1.6; font-weight: 400;
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.04; letter-spacing: -0.025em; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.gold { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* header */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; flex-wrap: wrap; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand b { color: var(--accent); font-weight: 700; }
+.brand em { font-style: normal; color: var(--muted); font-weight: 500; }
+.logo { flex: none; }
+.bar nav { display: flex; gap: 24px; flex-wrap: wrap; }
+.bar nav a { text-decoration: none; font-size: 13px; color: var(--muted); letter-spacing: 0.04em; }
+.bar nav a:hover { color: var(--accent); }
+
+/* hero frame */
+.frame {
+  position: relative; border: 1px solid var(--line); overflow: hidden; isolation: isolate;
+  aspect-ratio: 2.39 / 1; min-height: 340px; max-width: 100%;
+  display: grid; align-content: end; padding: clamp(18px, 4vw, 44px);
+  background:
+    radial-gradient(60% 90% at 78% 18%, var(--leak-a), transparent 62%),
+    radial-gradient(50% 80% at 12% 90%, var(--leak-b), transparent 65%),
+    var(--panel);
+}
+.frame::after { /* grain */
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.22; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+}
+.corner { position: absolute; width: 18px; height: 18px; border: 0 solid var(--fg); opacity: 0.55; }
+.c1 { top: 14px; left: 14px; border-top-width: 1px; border-left-width: 1px; }
+.c2 { top: 14px; right: 14px; border-top-width: 1px; border-right-width: 1px; }
+.c3 { bottom: 14px; left: 14px; border-bottom-width: 1px; border-left-width: 1px; }
+.c4 { bottom: 14px; right: 14px; border-bottom-width: 1px; border-right-width: 1px; }
+.hud { position: absolute; top: 28px; left: 32px; right: 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.rec { display: inline-flex; align-items: center; gap: 8px; }
+.rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #e0443a; animation: blink 1.6s steps(2, jump-none) infinite; }
+@keyframes blink { 50% { opacity: 0.25; } }
+.tc { font-variant-numeric: tabular-nums; color: var(--fg); }
+.frame h1 { font-size: clamp(38px, 8.4vw, 104px); font-weight: 800; max-width: 12ch; }
+.frame h1 em { font-style: normal; color: var(--accent); }
+.hero-sub { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-top: 22px; }
+.hero-sub p { max-width: 46ch; color: var(--muted); font-size: 15px; font-weight: 300; }
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-block; padding: 13px 24px; font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); cursor: pointer; font-family: var(--body); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* timeline strip */
+.tl { margin-top: 14px; border: 1px solid var(--line); background: var(--panel); padding: 14px 16px 14px 48px; position: relative; display: grid; gap: 5px; }
+.tl .track { position: relative; height: 22px; }
+.tl .track::before { content: attr(data-t); position: absolute; left: -34px; top: 0; height: 100%; display: flex; align-items: center; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.tl .clip { position: absolute; top: 0; height: 100%; border: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.tl .clip.s { background: color-mix(in srgb, var(--fg) 10%, transparent); }
+.tl .wave { background-image: repeating-linear-gradient(to right, transparent 0 3px, color-mix(in srgb, var(--fg) 30%, transparent) 3px 4px); border-color: var(--line); }
+.ph { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--accent); pointer-events: none; }
+
+/* facts */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-top: 40px; border-block: 1px solid var(--line); }
+.facts div { padding: 20px 20px 20px 0; display: grid; gap: 4px; min-width: 0; }
+.facts b { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+
+/* sections */
+section { padding-block: 96px 0; }
+.sec-head { display: grid; gap: 14px; margin-bottom: 40px; }
+.sec-head h2 { font-size: clamp(30px, 5vw, 54px); font-weight: 700; max-width: 18ch; }
+.sec-head p { color: var(--muted); max-width: 54ch; font-weight: 300; }
+
+.rows { border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px 40px; padding: 28px 0; border-bottom: 1px solid var(--line); align-items: baseline; transition: padding-left 0.25s; }
+.row:hover { padding-left: 12px; }
+.row:hover h3 { color: var(--accent); }
+.row h3 { font-size: clamp(22px, 3vw, 32px); font-weight: 700; transition: color 0.25s; }
+.row p { color: var(--muted); font-weight: 300; }
+@media (max-width: 640px) { .row { grid-template-columns: minmax(0, 1fr); } .row:hover { padding-left: 0; } }
+
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 28px; position: relative; padding-top: 28px; }
+.steps::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: var(--line); }
+.step { position: relative; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.step::before { content: ""; position: absolute; top: -28px; left: 0; width: 9px; height: 9px; background: var(--accent); transform: rotate(45deg); }
+.step h3 { font-size: 20px; font-weight: 700; }
+.step p { color: var(--muted); font-size: 15px; font-weight: 300; }
+
+.work { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; }
+.reel { display: grid; gap: 12px; min-width: 0; max-width: 100%; }
+.reel.wide { flex: 2 1 420px; }
+.reel.tall { flex: 1 1 220px; max-width: 280px; }
+.shot { position: relative; max-width: 100%; border: 1px solid var(--line); overflow: hidden; display: grid; place-items: center; background: var(--panel); }
+.wide .shot { aspect-ratio: 16 / 9; background: radial-gradient(70% 90% at 25% 20%, var(--leak-b), transparent 70%), radial-gradient(60% 80% at 85% 90%, var(--leak-a), transparent 70%), var(--panel); }
+.tall .shot { aspect-ratio: 9 / 16; background: radial-gradient(80% 60% at 70% 15%, var(--leak-a), transparent 70%), radial-gradient(70% 60% at 20% 95%, var(--leak-b), transparent 70%), var(--panel); }
+.play { width: 54px; height: 54px; border: 1px solid var(--fg); border-radius: 50%; display: grid; place-items: center; opacity: 0.85; }
+.play::after { content: ""; border-left: 13px solid var(--fg); border-block: 8px solid transparent; margin-left: 4px; }
+.shot .dur { position: absolute; right: 10px; bottom: 10px; font-family: var(--mono); font-size: 11px; color: var(--fg); }
+.shot .ratio { position: absolute; left: 10px; top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); }
+.reel h3 { font-size: 19px; font-weight: 700; }
+.note { font-size: 13px; color: var(--muted); margin-top: 20px; }
+
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0; border: 1px solid var(--line); }
+.plan { padding: 32px 28px; display: grid; gap: 14px; align-content: start; min-width: 0; border-right: 1px solid var(--line); }
+.plan:last-child { border-right: 0; }
+.plan.hi { background: var(--panel); box-shadow: inset 0 2px 0 var(--accent); }
+.plan h3 { font-size: 22px; font-weight: 700; }
+.price { font-family: var(--display); font-size: 44px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.price small { font-family: var(--body); font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+.plan ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--muted); font-size: 15px; font-weight: 300; }
+.plan li::before { content: "—"; color: var(--accent); margin-right: 10px; }
+@media (max-width: 640px) { .plan { border-right: 0; border-bottom: 1px solid var(--line); } .plan:last-child { border-bottom: 0; } }
+
+.contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 48px; }
+.contact h2 { font-size: clamp(32px, 6vw, 64px); font-weight: 800; max-width: 11ch; }
+.details { display: grid; gap: 0; align-content: start; }
+.details .lead { display: grid; gap: 18px; margin-bottom: 28px; }
+.d { border-top: 1px solid var(--line); padding: 14px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-width: 0; }
+.d:last-of-type { border-bottom: 1px solid var(--line); }
+.d > div { display: grid; min-width: 0; overflow-wrap: anywhere; }
+.copy { background: transparent; border: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 10px; cursor: pointer; flex: none; }
+.copy:hover { color: var(--accent); border-color: var(--accent); }
+form { display: grid; gap: 14px; align-content: start; }
+label { display: grid; gap: 6px; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+input, select, textarea { font: inherit; font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--fg); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 10px 0; width: 100%; min-width: 0; border-radius: 0; }
+select option { background: var(--panel); color: var(--fg); }
+input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); }
+textarea { min-height: 92px; resize: vertical; }
+form .btn { justify-self: start; margin-top: 8px; }
+#msg { font-size: 14px; color: var(--accent); min-height: 1.4em; }
+
+footer { margin-top: 96px; border-top: 1px solid var(--line); padding-block: 24px 36px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .frame { aspect-ratio: auto; min-height: 420px; }
+  .hud { top: 26px; left: 28px; right: 28px; }
+  section { padding-block: 72px 0; }
+}
+@media (prefers-reduced-motion: reduce) { .rec::before { animation: none; } .row { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" width="38" height="38" role="img" aria-label="Editing.Coreeé Production logo" fill="none">
+        <g stroke="var(--fg)" stroke-width="2" opacity="0.6"><path d="M8 20V8h12M44 8h12v12M8 44v12h12M44 56h12V44"/></g>
+        <path d="M39 21.3A14 14 0 1 0 39 42.7" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M46 21V47" stroke="var(--fg)" stroke-width="2"/>
+        <path d="M42.5 15h7L46 21z" fill="var(--accent)"/>
+      </svg>
+      <span>Editing<b>.</b>Coreeé <em>Production</em></span>
+    </div>
+    <nav aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#work">Work</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="frame">
+      <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+      <div class="hud mono">
+        <span class="rec">REC · Seq 01 · 24 fps</span>
+        <span class="tc" id="tc">00:00:12:08</span>
+      </div>
+      <h1>Your footage, cut <em>to the frame.</em></h1>
+      <div class="hero-sub">
+        <p>Editing.Coreeé Production cuts YouTube videos, reels and ads. Raw clips in, a finished edit out, with colour, sound and revisions included.</p>
+        <div class="cta-row">
+          <a class="btn" href="#contact">Start a project</a>
+          <a class="btn ghost" href="#pricing">See pricing</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl" aria-label="Sample editing timeline">
+      <div class="track" data-t="V2">
+        <div class="clip" style="left:8%;width:20%"></div>
+        <div class="clip" style="left:62%;width:26%"></div>
+      </div>
+      <div class="track" data-t="V1">
+        <div class="clip s" style="left:0;width:28%"></div>
+        <div class="clip" style="left:29%;width:20%"></div>
+        <div class="clip s" style="left:50%;width:30%"></div>
+        <div class="clip" style="left:81%;width:19%"></div>
+      </div>
+      <div class="track" data-t="A1">
+        <div class="clip wave" style="left:0;width:100%"></div>
+      </div>
+      <div class="ph" id="ph" style="left:48px"></div>
+    </div>
+
+    <div class="facts">
+      <div><b>Cut, colour, sound</b><span class="mono">One team, one pass</span></div>
+      <div><b>2 revision rounds</b><span class="mono">On every project</span></div>
+      <div><b>Every aspect ratio</b><span class="mono">16:9 · 9:16 · 1:1 · 4:5</span></div>
+    </div>
+
+    <section id="services">
+      <div class="sec-head">
+        <span class="mono gold">Services</span>
+        <h2>What we edit</h2>
+        <p>Every edit includes colour correction and audio cleanup.</p>
+      </div>
+      <div class="rows">
+        <article class="row"><h3>YouTube &amp; long-form</h3><p>Tight pacing, jump cuts, captions and chapter-friendly structure, exported ready to upload.</p></article>
+        <article class="row"><h3>Reels &amp; Shorts</h3><p>Vertical 9:16 edits with strong hooks, subtitles and beat-matched cuts for Instagram and YouTube Shorts.</p></article>
+        <article class="row"><h3>Ads &amp; brand films</h3><p>15 to 90 second promos for products and businesses, with motion text and clean brand colours.</p></article>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="sec-head">
+        <span class="mono gold">Process</span>
+        <h2>From raw files to final export</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Brief &amp; upload</h3><p>Share footage and references through a Drive or WeTransfer link, and tell us the style you want.</p></div>
+        <div class="step"><h3>Rough cut</h3><p>We assemble the story, pacing and music, then send a preview link.</p></div>
+        <div class="step"><h3>Revisions</h3><p>Note changes by timecode. We fix them, up to two rounds.</p></div>
+        <div class="step"><h3>Final delivery</h3><p>Colour, sound mix and export in the format and ratio you need.</p></div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sec-head">
+        <span class="mono gold">Work</span>
+        <h2>Want to see samples?</h2>
+        <p>Visit our Instagram to see our work.</p>
+      </div>
+      <a class="btn" href="https://www.instagram.com/editing.coreee_/" target="_blank" rel="noopener">Visit @editing.coreee_</a>
+    </section>
+
+    <section id="pricing">
+      <div class="sec-head">
+        <span class="mono gold">Pricing</span>
+        <h2>Simple per-video rates</h2>
+        <p>For bigger projects, ask for a quote.</p>
+      </div>
+      <div class="plans">
+        <div class="plan"><h3>Reel</h3><div class="price">₹499 <small>/ video</small></div><ul><li>Up to 60 seconds</li><li>Subtitles and music</li><li>1 revision</li></ul></div>
+        <div class="plan hi"><h3>YouTube</h3><div class="price">₹1,599 <small>/ video</small></div><ul><li>Up to 10 minutes</li><li>Colour and audio cleanup</li><li>2 revisions</li></ul></div>
+        <div class="plan"><h3>Custom</h3><div class="price">Quote <small>/ project</small></div><ul><li>Ads, brand films, series</li><li>Monthly packages</li><li>Priority turnaround</li></ul></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact">
+        <div class="details">
+          <div class="lead">
+            <span class="mono gold">Contact</span>
+            <h2>Got footage? Let's cut it.</h2>
+          </div>
+          <div class="d"><div><span class="mono">Email</span><span id="v-mail">editingcoreee07@gmail.com</span></div><button class="copy" type="button" data-copy="v-mail">Copy</button></div>
+          <div class="d"><div><span class="mono">WhatsApp</span><span id="v-wa">+91 9288332500</span></div><button class="copy" type="button" data-copy="v-wa">Copy</button></div>
+          <div class="d"><div><span class="mono">Instagram</span><a id="v-ig" href="https://www.instagram.com/editing.coreee_/" target="_blank" rel="noopener">@editing.coreee_</a></div><button class="copy" type="button" data-copy="v-ig">Copy</button></div>
+        </div>
+        <form id="f" novalidate>
+          <label for="n">Your name<input id="n" type="text" autocomplete="name"></label>
+          <label for="t">Type of video
+            <select id="t"><option>YouTube video</option><option>Reel / Short</option><option>Ad / Brand film</option></select>
+          </label>
+          <label for="d">Tell us about it<textarea id="d" placeholder="Length of raw footage, style, deadline"></textarea></label>
+          <button class="btn" type="submit">Send on WhatsApp</button>
+          <span class="mono">Opens WhatsApp with your message ready</span>
+          <div id="msg" role="status"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span class="mono">© 2026 Editing.Coreeé Production</span>
+    <span class="mono">Cut · Colour · Sound</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var ph = document.getElementById('ph'), tc = document.getElementById('tc'), tl = ph.parentNode;
+  var fps = 24, total = 30 * fps;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function set(p) {
+    var left = 48, w = tl.clientWidth - 48 - 16;
+    ph.style.left = (left + w * p) + 'px';
+    var f = Math.floor(p * total);
+    tc.textContent = '00:00:' + pad(Math.floor(f / fps)) + ':' + pad(f % fps);
+  }
+  set(0.34);
+  if (!reduce) {
+    var t0 = null;
+    (function tick(ts) {
+      if (t0 === null) t0 = ts;
+      set((0.34 + (ts - t0) / 26000) % 1);
+      requestAnimationFrame(tick);
+    })(performance.now());
+  }
+  window.addEventListener('resize', function () { if (reduce) set(0.34); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.copy'), function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.getAttribute('data-copy'));
+      var txt = el.textContent.trim();
+      function done() { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(el);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selected'; setTimeout(function () { b.textContent = 'Copy'; }, 1500);
+      }
+      try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (e) { fallback(); }
+    });
+  });
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('n').value.trim();
+    var type = document.getElementById('t').value;
+    var desc = document.getElementById('d').value.trim();
+    var msg = document.getElementById('msg');
+    if (!name || !desc) { msg.textContent = 'Please enter your name and project details.'; return; }
+    var text = 'Hi Editing.Coreeé Production! My name is ' + name + '.\nVideo type: ' + type + '\nDetails: ' + desc;
+    var url = 'https://wa.me/919288332500?text=' + encodeURIComponent(text);
+    msg.textContent = 'Opening WhatsApp... if it does not open, message us on +91 9288332500';
+    var a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+})();
+</script>
+
+</html>
